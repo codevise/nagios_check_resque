@@ -9,7 +9,7 @@ Nagios plugins to check Resque queue sizes and number of failed jobs.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nagios_check_resque', require: false
+gem 'nagios_check_resque', '~> 1.0', require: false
 ```
 
 And then execute:
