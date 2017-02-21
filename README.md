@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/nagios_check_resque.svg)](http://badge.fury.io/rb/nagios_check_resque)
 
-Nagios plugins to check Resque queue sized and number of failed jobs.
+Nagios plugins to check Resque queue sizes and number of failed jobs.
 
 ## Installation
 
