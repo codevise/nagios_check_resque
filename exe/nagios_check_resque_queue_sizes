@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'nagios_check_resque/queue_size_check'
+
+NagiosCheckResque::QueueSizeCheck.new.run

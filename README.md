@@ -1,41 +1,65 @@
-# NagiosCheckResque
+# Nagios Check Resque
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/nagios_check_resque`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Nagios plugins to check Resque queue sized and number of failed jobs.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'nagios_check_resque'
+gem 'nagios_check_resque', require: false
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install nagios_check_resque
-
 ## Usage
 
-TODO: Write usage instructions here
+The provides two executables. To check queue sizes, run:
+
+    $ bundle exec nagios_check_resque_queue_sizes --queues default,mailer -w 5 -c 8 -t 10
+
+The result is OK if all given queues contain at most 5 jobs.  If one
+of the queues contains more than 5 but not more than 8 jobs, the
+result is WARNING.  If one of the queues contains more than 8 jobs,
+the result is CRITICAL.  If the command takes more than 10 seconds to
+finish, the result is UNKNOWN.
+
+The number of jobs in each queue is printed as key value pairs in the
+performance data.
+
+To check the number of failed jobs, run:
+
+    $ bundle exec nagios_check_resque_failed_jobs -w 5 -c 8 -t 10
+
+The result is OK if there are at most 5 failed jobs.  If there are
+more than 5 failed jobs but not more than 8, the result is WARNING.
+If there are more than 8 failed jobs, the result is CRITICAL.  If the
+command takes more than 10 seconds to finish, the result is UNKNOWN.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install
+dependencies. You can also run `bin/console` for an interactive prompt
+that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake
+install`. To release a new version, update the version number in
+`version.rb`, and then run `bundle exec rake release`, which will
+create a git tag for the version, push git commits and tags, and push
+the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Tim Fischbach/nagios_check_resque. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/codevise/nagios_check_resque. This project is
+intended to be a safe, welcoming space for collaboration, and
+contributors are expected to adhere to the
+[Contributor Covenant](http://contributor-covenant.org) code of
+conduct.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
+The gem is available as open source under the terms of the
+[MIT License](http://opensource.org/licenses/MIT).

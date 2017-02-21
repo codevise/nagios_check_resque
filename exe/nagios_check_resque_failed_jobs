@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'nagios_check_resque/failed_jobs_check'
+
+NagiosCheckResque::FailedJobsCheck.new.run
