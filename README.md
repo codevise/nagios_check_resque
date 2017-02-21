@@ -38,6 +38,49 @@ more than 5 failed jobs but not more than 8, the result is WARNING.
 If there are more than 8 failed jobs, the result is CRITICAL.  If the
 command takes more than 10 seconds to finish, the result is UNKNOWN.
 
+## Example Nagios Configuration
+
+You can define a custom Nagios command to invoke the executables via
+SSH. Line breaks have been inserted to improve readability, but have
+to be removed in the actual Nagios config.
+
+```
+define command {
+        command_name    check_by_ssh_resque_queue_sizes
+        command_line    $USER1$/check_by_ssh -l nagios -H $HOSTADDRESS$
+                          -C "BUNDLE_GEMFILE=/path/to/Gemfile
+                              /usr/local/bin/bundle exec nagios_check_resque_queue_sizes
+                              --queues $ARG2$
+                              -w $ARG1$ -c $ARG2$ -t 10"
+}
+
+define command {
+        command_name    check_by_ssh_resque_failed_jobs
+        command_line    $USER1$/check_by_ssh -l nagios -H $HOSTADDRESS$
+                          -C "BUNDLE_GEMFILE=/path/to/Gemfile
+                              /usr/local/bin/bundle exec nagios_check_resque_failed_jobs
+                              -w $ARG1$ -c $ARG2$ -t 10"
+}
+```
+
+They can then be used in host definitions:
+
+```
+define service {
+  use                           generic-service
+  host_name                     some-host
+  service_description           RESQUE_QUEUE_SIZES
+  check_command                 check_by_ssh_resque_queue_sizes!default!10!20
+}
+
+define service {
+  use                           generic-service
+  host_name                     some-host
+  service_description           RESQUE_FAILED_JOBS
+  check_command                 check_by_ssh_resque_failed_jobs!0!10
+}
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install
