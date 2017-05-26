@@ -41,6 +41,16 @@ more than 5 failed jobs but not more than 8, the result is WARNING.
 If there are more than 8 failed jobs, the result is CRITICAL.  If the
 command takes more than 10 seconds to finish, the result is UNKNOWN.
 
+## Specifying a Redis URL
+
+By default the checks assume that Redis is accessible at
+`localhost:6379`. A different Redis URL can either be passed via the
+command line:
+
+    $ bundle exec nagios_check_resque_failed_jobs -w 5 -c 8 -t 10 --redis-url redis://other:6379
+
+or by setting the environment variable `REDIS_URL`.
+
 ## Example Nagios Configuration
 
 You can define a custom Nagios command to invoke the executables via
