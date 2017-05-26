@@ -2,6 +2,10 @@ require 'nagios_check_resque/queue_size_check'
 
 module NagiosCheckResque
   RSpec.describe QueueSizeCheck do
+    before(:each) do
+      ENV.delete('REDIS_URL')
+    end
+
     it 'is ok when all queues have less than w jobs' do
       resque = resque_adapter_double(default: 5, mailers: 0)
       check = QueueSizeCheck.new(resque)
@@ -44,16 +48,16 @@ module NagiosCheckResque
 
       check.perform(%w(-w 10 -c 20 --queues default))
 
-      expect(resque).to have_received(:setup).with(redis_host: 'redis://localhost:6379')
+      expect(resque).to have_received(:setup).with(redis_url: 'redis://localhost:6379')
     end
 
     it 'allows passing custom redis host' do
       resque = resque_adapter_double(default: 4)
       check = QueueSizeCheck.new(resque)
 
-      check.perform(%w(-w 10 -c 20 --queues default --redis-host redis://other:6379))
+      check.perform(%w(-w 10 -c 20 --queues default --redis-url redis://other:6379))
 
-      expect(resque).to have_received(:setup).with(redis_host: 'redis://other:6379')
+      expect(resque).to have_received(:setup).with(redis_url: 'redis://other:6379')
     end
 
     def resque_adapter_double(queue_sizes)

@@ -6,7 +6,7 @@ module NagiosCheckResque
   class FailedJobsCheck
     include NagiosCheck
 
-    on '--redis-host HOST', default: 'redis://localhost:6379'
+    on '--redis-url URL', default: ENV.fetch('REDIS_URL', 'redis://localhost:6379')
 
     enable_warning
     enable_critical
@@ -17,7 +17,7 @@ module NagiosCheckResque
     end
 
     def check
-      @resque.setup(redis_host: options['redis-host'])
+      @resque.setup(redis_url: options['redis-url'])
 
       failed_jobs_count = @resque.failed_count
 

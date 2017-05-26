@@ -4,7 +4,7 @@ require 'resque/failure/redis'
 module NagiosCheckResque
   class ResqueAdapter
     def setup(options)
-      Resque.redis = Redis.new(host: options[:redis_host])
+      Resque.redis = options[:redis_url]
     end
 
     def queue_size(queue)

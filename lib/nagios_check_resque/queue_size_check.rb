@@ -7,7 +7,7 @@ module NagiosCheckResque
     include NagiosCheck
 
     on '--queues QUEUES', :mandatory
-    on '--redis-host HOST', default: 'redis://localhost:6379'
+    on '--redis-url URL', default: ENV.fetch('REDIS_URL', 'redis://localhost:6379')
 
     enable_warning
     enable_critical
@@ -18,7 +18,7 @@ module NagiosCheckResque
     end
 
     def check
-      @resque.setup(redis_host: options['redis-host'])
+      @resque.setup(redis_url: options['redis-url'])
 
       store_message(queue_sizes_message)
       store_value(:max, queue_sizes.values.max)
