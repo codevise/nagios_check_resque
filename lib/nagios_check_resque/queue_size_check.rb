@@ -38,7 +38,7 @@ module NagiosCheckResque
 
     def queue_sizes
       @queue_sizes ||= queues.each_with_object({}) do |name, sizes|
-        sizes[name] = @resque.size(name)
+        sizes[name] = @resque.queue_size(name)
       end
     end
 

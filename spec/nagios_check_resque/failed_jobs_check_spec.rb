@@ -3,7 +3,7 @@ require 'nagios_check_resque/failed_jobs_check'
 module NagiosCheckResque
   RSpec.describe FailedJobsCheck do
     it 'is ok when number of failed jobs is below w' do
-      resque = instance_spy('ResqueAdapter', failed_count: 20)
+      resque = instance_spy(ResqueAdapter, failed_count: 20)
       check = FailedJobsCheck.new(resque)
 
       result = check.perform(%w(-w 30 -c 40))
@@ -12,7 +12,7 @@ module NagiosCheckResque
     end
 
     it 'is warning when number of failed jobs is between w and c' do
-      resque = instance_spy('ResqueAdapter', failed_count: 35)
+      resque = instance_spy(ResqueAdapter, failed_count: 35)
       check = FailedJobsCheck.new(resque)
 
       result = check.perform(%w(-w 30 -c 40))
@@ -21,7 +21,7 @@ module NagiosCheckResque
     end
 
     it 'is critical when number of failed jobs is above c' do
-      resque = instance_spy('ResqueAdapter', failed_count: 41)
+      resque = instance_spy(ResqueAdapter, failed_count: 41)
       check = FailedJobsCheck.new(resque)
 
       result = check.perform(%w(-w 30 -c 40))
@@ -30,7 +30,7 @@ module NagiosCheckResque
     end
 
     it 'sets up resque with redis host' do
-      resque = instance_spy('ResqueAdapter', failed_count: 20)
+      resque = instance_spy(ResqueAdapter, failed_count: 20)
       check = FailedJobsCheck.new(resque)
 
       check.perform(%w(-w 30 -c 40))
@@ -39,7 +39,7 @@ module NagiosCheckResque
     end
 
     it 'allows passing custom redis host' do
-      resque = instance_spy('ResqueAdapter', failed_count: 20)
+      resque = instance_spy(ResqueAdapter, failed_count: 20)
       check = FailedJobsCheck.new(resque)
 
       check.perform(%w(-w 30 -c 40 --redis-host redis://other:6379))

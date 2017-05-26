@@ -57,10 +57,10 @@ module NagiosCheckResque
     end
 
     def resque_adapter_double(queue_sizes)
-      resque = instance_spy('ResqueAdapter')
+      resque = instance_spy(ResqueAdapter)
 
       queue_sizes.each do |name, size|
-        allow(resque).to receive(:size).with(name.to_s).and_return(size)
+        allow(resque).to receive(:queue_size).with(name.to_s).and_return(size)
       end
 
       resque

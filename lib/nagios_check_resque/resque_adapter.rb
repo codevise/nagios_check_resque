@@ -7,8 +7,8 @@ module NagiosCheckResque
       Resque.redis = Redis.new(host: options[:redis_host])
     end
 
-    def count(queue)
-      Resque.count(queue)
+    def queue_size(queue)
+      Resque.size(queue)
     end
 
     def failed_count
