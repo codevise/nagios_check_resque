@@ -1,5 +1,5 @@
 require 'nagios_check'
-require 'resque'
+require 'nagios_check_resque/resque_adapter'
 
 module NagiosCheckResque
   # Prevent jobs from queuing up
@@ -13,9 +13,14 @@ module NagiosCheckResque
     enable_critical
     enable_timeout
 
-    def check
-      setup_resque
+    def initialize(resque = ResqueAdapter.new)
+      @resque = resque
+    end
 
+    def check
+      @resque.setup(redis_host: options['redis-host'])
+
+      store_message(queue_sizes_message)
       store_value(:max, queue_sizes.values.max)
 
       queue_sizes.each do |name, size|
@@ -25,18 +30,20 @@ module NagiosCheckResque
 
     private
 
+    def queue_sizes_message
+      queue_sizes.sort_by { |_, size| size }.reverse.map { |name, size|
+        "#{size} in #{name}"
+      }.compact.join(', ')
+    end
+
     def queue_sizes
       @queue_sizes ||= queues.each_with_object({}) do |name, sizes|
-        sizes[name] = Resque.size(name)
+        sizes[name] = @resque.size(name)
       end
     end
 
     def queues
       options.queues.split(',')
-    end
-
-    def setup_resque
-      Resque.redis = Redis.new(host: options.redis_host)
     end
   end
 end

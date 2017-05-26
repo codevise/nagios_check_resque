@@ -1,7 +1,5 @@
 require 'nagios_check'
-
-require 'resque'
-require 'resque/failure/redis'
+require 'nagios_check_resque/resque_adapter'
 
 module NagiosCheckResque
   # Warn if there are failed jobs
@@ -14,16 +12,17 @@ module NagiosCheckResque
     enable_critical
     enable_timeout
 
-    def check
-      setup_resque
-      store_value(:failed, Resque::Failure::Redis.count)
+    def initialize(resque = ResqueAdapter.new)
+      @resque = resque
     end
 
-    private
+    def check
+      @resque.setup(redis_host: options['redis-host'])
 
-    def setup_resque
-      Resque.redis = Redis.new(host: options.redis_host)
-      Resque
+      failed_jobs_count = @resque.failed_count
+
+      store_message("#{failed_jobs_count} failed jobs")
+      store_value(:failed, failed_jobs_count)
     end
   end
 end
