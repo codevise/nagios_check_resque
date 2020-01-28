@@ -2,9 +2,17 @@
 
 ### Changes on `master`
 
-[Compare changes](https://github.com/codevise/nagios_check_resque/compare/v1.1.0...master)
+[Compare changes](https://github.com/codevise/nagios_check_resque/compare/v1.2.0...master)
 
 None so far.
+
+### Version 1.1.0
+
+2020-01-28
+
+[Compare changes](https://github.com/codevise/nagios_check_resque/compare/v1.1.0...v1.2.0)
+
+- Relax version requirement of `resque` gem to allow 2.x.
 
 ### Version 1.1.0
 
